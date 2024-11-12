@@ -23,7 +23,7 @@ export class NpmCodepipelineStack extends cdk.Stack {
     );
 
     //Update these
-    const repo = 'gen3-aws-config';
+    const repo = 'your repo';
     const owner = 'AustralianBioCommons';
 
     // Source action: Connect to GitHub using CodeStar connection
