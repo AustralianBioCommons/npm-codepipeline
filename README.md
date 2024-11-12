@@ -1,6 +1,6 @@
-# Welcome to your CDK TypeScript project
+# NPM Build Pipeline
 
-This is a blank project for CDK development with TypeScript.
+Creates a pipeline to build and publishes packages to code artifacts.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
