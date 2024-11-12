@@ -4,7 +4,7 @@ import * as codepipelineActions from "aws-cdk-lib/aws-codepipeline-actions";
 import * as codebuild from "aws-cdk-lib/aws-codebuild";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 
-export class NpmPublishPipelineStack extends cdk.Stack {
+export class NpmCodepipelineStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
