@@ -9,6 +9,7 @@ export class NpmCodepipelineStack extends cdk.Stack {
     super(scope, id, props);
 
     // Retrieve GitHub token and CodeStar connection ARN from Secrets Manager
+
     const githubTokenSecret = secretsmanager.Secret.fromSecretNameV2(
       this,
       "GithubToken",
@@ -29,7 +30,8 @@ export class NpmCodepipelineStack extends cdk.Stack {
         repo: "your-repo",
         branch: "main",
         output: sourceOutput,
-        connectionArn: codestarConnectionArnSecret.secretValue.toString(),
+        // We can expose connection arn
+        connectionArn: codestarConnectionArnSecret.secretValue.unsafeUnwrap.toString(),
       });
 
     // CodeBuild project: Build and publish to CodeArtifact
@@ -37,25 +39,26 @@ export class NpmCodepipelineStack extends cdk.Stack {
       environment: {
         buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
         environmentVariables: {
-          GITHUB_TOKEN: { value: githubTokenSecret.secretValue.toString() },
+          'GITHUB_TOKEN': {
+            type: codebuild.BuildEnvironmentVariableType.SECRETS_MANAGER,
+            value: githubTokenSecret.secretFullArn || githubTokenSecret.secretArn,
+          },
         },
       },
       buildSpec: codebuild.BuildSpec.fromObject({
         version: "0.2",
         phases: {
           install: {
-            commands: [
-              "npm ci", 
-            ],
+            commands: ["npm ci"],
           },
           build: {
             commands: [
-              "npm run build", 
-              "npx release-please release-pr --token $GITHUB_TOKEN", 
-              "npx release-please github-release --token $GITHUB_TOKEN", 
-              "npm version from-git", 
-              "npm run prepare", 
-              "npm publish", 
+              "npm run build",
+              "npx release-please release-pr --token $GITHUB_TOKEN",
+              "npx release-please github-release --token $GITHUB_TOKEN",
+              "npm version from-git",
+              "npm run prepare",
+              "npm publish",
             ],
           },
         },
