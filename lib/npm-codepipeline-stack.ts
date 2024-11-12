@@ -9,7 +9,7 @@ export class NpmCodepipelineStack extends cdk.Stack {
     super(scope, id, props);
 
     // Retrieve GitHub token and CodeStar connection ARN from Secrets Manager
-    // Retrieve GitHub token and CodeStar connection ARN from Secrets Manager
+
     const githubTokenSecret = secretsmanager.Secret.fromSecretNameV2(
       this,
       "GithubToken",
