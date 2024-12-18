@@ -5,6 +5,11 @@ import { NpmCodepipelineStack } from '../lib/npm-codepipeline-stack';
 
 const app = new cdk.App();
 new NpmCodepipelineStack(app, "NpmCodepipelineStack", {
+  // Update your repo here:
   owner: "AustralianBioCommons",
-  repo: "seqera-aws-config"
+  repo: "my-repo-name",
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
 });
