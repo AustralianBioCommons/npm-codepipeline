@@ -5,12 +5,18 @@ import * as codebuild from "aws-cdk-lib/aws-codebuild";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
+interface NpmCodepipelineStackProps extends cdk.StackProps {
+  repo: string;
+  owner: string;
+}
+
 export class NpmCodepipelineStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.App, id: string, props: NpmCodepipelineStackProps) {
     super(scope, id, props);
 
-    // Retrieve GitHub token and CodeStar connection ARN from Secrets Manager
+    const { repo, owner } = props;
 
+    // Retrieve GitHub token and CodeStar connection ARN from Secrets Manager
     const githubTokenSecret = secretsmanager.Secret.fromSecretNameV2(
       this,
       "GithubToken",
@@ -21,10 +27,6 @@ export class NpmCodepipelineStack extends cdk.Stack {
       "CodeStarConnectionArn",
       "code-star-connection-arn"
     );
-
-    //Update these
-    const repo = 'your repo';
-    const owner = 'AustralianBioCommons';
 
     // Source action: Connect to GitHub using CodeStar connection
     const sourceOutput = new codepipeline.Artifact();
