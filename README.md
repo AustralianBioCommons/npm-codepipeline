@@ -2,14 +2,33 @@
 
 Creates a pipeline to build and publishes packages to code artifacts.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Prerequesites
+Codestar github connection in secrets manager named **code-star-connection-arn**
 
-## Useful commands
+Github PAT in secrets manager named **config-github-token**
 
+**release-please** configured in the source repo
+
+## How to deploy this pipeline
+
+1. Edit `./bin/npm-codepipeline-stack.ts` and your repo name:
+```
+new NpmCodepipelineStack(app, "NpmCodepipelineStack", {
+  owner: "AustralianBioCommons",
+  repo: "my-repo-name", //Update this with your repo name
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+```
+
+2. Add the following environment variables in your terminal
+`export CDK_DEFAULT_ACCOUNT=<your-tooling-aws-account-name>`
+`CDK_DEFAULT_REGION=<aws-region>`
+
+3. Deploy the pipeline
+`cdk deploy NpmCodepipelineStack`
 * `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+
 # npm-codepipeline
